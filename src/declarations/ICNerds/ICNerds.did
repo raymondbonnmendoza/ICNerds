@@ -1,0 +1,80 @@
+type TokenMetadata = 
+ record {
+   minted_at: nat64;
+   minted_by: principal;
+   operator: opt principal;
+   owner: principal;
+   properties: vec record {
+                     text;
+                     GenericValue;
+                   };
+   token_identifier: nat;
+   transferred_at: opt nat64;
+   transferred_by: opt principal;
+ };
+type Result_3 = 
+ variant {
+   err: NftError;
+   ok: opt principal;
+ };
+type Result_2 = 
+ variant {
+   err: NftError;
+   ok: vec TokenMetadata;
+ };
+type Result_1 = 
+ variant {
+   err: NftError;
+   ok: TokenMetadata;
+ };
+type Result = 
+ variant {
+   err: NftError;
+   ok: nat;
+ };
+type NftError = 
+ variant {
+   ExistedNFT;
+   OperatorNotFound;
+   Other: text;
+   OwnerNotFound;
+   SelfApprove;
+   SelfTransfer;
+   TokenNotFound;
+   TxNotFound;
+   Unauthorized;
+ };
+type GenericValue = 
+ variant {
+   BlobContent: vec nat8;
+   BoolContent: bool;
+   Int16Content: int16;
+   Int32Content: int32;
+   Int64Content: int64;
+   Int8Content: int8;
+   IntContent: int;
+   Nat16Content: nat16;
+   Nat32Content: nat32;
+   Nat64Content: nat64;
+   Nat8Content: nat8;
+   NatContent: nat;
+   Principal: principal;
+   TextContent: text;
+ };
+service : {
+  allTokenMetadata: () -> (Result_2) query;
+  balanceOf: (principal) -> (nat) query;
+  greet: (text) -> (text);
+  logo: () -> (opt text) query;
+  mint: (principal, nat, vec record {
+                               text;
+                               GenericValue;
+                             }) -> (nat);
+  name: () -> (opt text) query;
+  ownerOf: (nat) -> (Result_3) query;
+  ownerTokenMetadata: (principal) -> (Result_2) query;
+  symbol: () -> (opt text) query;
+  tokenMetadata: (nat) -> (Result_1) query;
+  totalSupply: () -> (nat) query;
+  transferFrom: (principal, principal, nat) -> (Result);
+}
